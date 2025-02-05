@@ -16,16 +16,16 @@ database.connectToDB();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173", // Default to frontend's origin
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    maxAge: 14400,
-  })
-);
-
+// app.use(
+//   cors({
+//     origin: process.env.CORS_ORIGIN || "http://localhost:5174", // Default to frontend's origin
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     maxAge: 14400,
+//   })
+// );
+app.use(cors());
 // Base API endpoint
 app.get("/", (req, res) => {
   res.json({

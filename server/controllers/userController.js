@@ -4,6 +4,9 @@ const bcrypt = require("bcrypt");
 
 // ✅
 exports.register = async (req, res) => {
+  console.log("REGISTERING NEW USER");
+  console.log(req.body);
+  
   try {
     const { email, username, password, confirmPassword, role } = req.body;
 
