@@ -1,17 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose"); // importing mongoose which connects mongoDB to Node.js
+const Schema = mongoose.Schema; // this statement is used for creation of schema
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(// schema is stored in a variable
   {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
+    username: { // username field 
+      type: String, // type of data
+      required: true, // mandatory field
+      unique: true, // it should be unique
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
+    email: { // email entry field
+      type: String, // data type
+      required: true,//mandatory field
+      unique: true,// must be unique
     },
     password: {
       type: String,
@@ -19,12 +19,12 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "user"],
+      enum: ["admin", "user"],// different properties for admin and users depending on choice
       required: true,
     },
     attemptedQuizes: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,// importing another blueprint
         ref: "Quiz",
       },
     ],

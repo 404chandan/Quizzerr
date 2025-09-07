@@ -2,11 +2,12 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
-// ✅
+// controller for login
+//handles registration and all fucntions for new user and routes are connected in index.js page
 exports.register = async (req, res) => {
   console.log("REGISTERING NEW USER");
   console.log(req.body);
-  
+//validation of input fields  
   try {
     const { email, username, password, confirmPassword, role } = req.body;
 
@@ -15,14 +16,14 @@ exports.register = async (req, res) => {
         .status(400)
         .json({ success: false, error: "Please fill all the fields" });
     }
-
+  //validation of password
     if (password !== confirmPassword) {
       return res.status(400).json({
         success: false,
         error: "Password and Confirm Password should be same",
       });
     }
-
+//check duplicates in email and username
     const emailExists = await User.findOne({ email });
     
     if (emailExists) {
@@ -38,16 +39,16 @@ exports.register = async (req, res) => {
         .status(400)
         .json({ success: false, error: "Username already exists" });
     }
-
+    //protection against storing raw password
     const hashedPasssword = await bcrypt.hash(password, 10);
-
+    //creation of user
     const user = await User.create({
       username,
       email,
       password: hashedPasssword,
       role,
     });
-
+    //return 200 if user created otherwise 400
     return res
       .status(200)
       .json({ success: true, message: "User created successfully" });
@@ -59,7 +60,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// ✅
+//login function for exisiting users
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -69,24 +70,24 @@ exports.login = async (req, res) => {
         .status(400)
         .json({ success: false, error: "Please fill all the fields" });
     }
-
+    //check if email really exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ success: false, error: "User not found" });
     }
-
+    //if exists match passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
         .status(400)
         .json({ success: false, error: "Invalid credentials" });
     }
-
+// generating jwt token for further use
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: "7d", //duration of jwt
       }
     );
 
